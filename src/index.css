@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
   /* Palet tema hijau sekolah */
@@ -359,4 +359,100 @@ body {
   border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.75s linear infinite;
+}
+
+/* PPDB module */
+.ppdb-stepper {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+.ppdb-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.5;
+}
+.ppdb-step.active,
+.ppdb-step.done {
+  opacity: 1;
+}
+.ppdb-step-circle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.ppdb-status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.status-draft { background: #e9ecef; color: #495057; }
+.status-pending { background: #fff3cd; color: #856404; }
+.status-warning { background: #ffe5d0; color: #c45c00; }
+.status-info { background: #cff4fc; color: #055160; }
+.status-success { background: #d1e7dd; color: #0f5132; }
+.status-danger { background: #f8d7da; color: #842029; }
+.ppdb-upload-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.ppdb-upload-card {
+  padding: 1rem;
+}
+.ppdb-upload-ok {
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 0.5rem;
+}
+.ppdb-dash-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+.ppdb-info-hero {
+  padding: 3rem 2rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  text-align: center;
+}
+.ppdb-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto 3rem;
+  padding: 0 1rem;
+}
+.ppdb-info-card {
+  padding: 1.5rem;
+}
+.ppdb-info-card ul,
+.ppdb-info-card ol {
+  text-align: left;
+  margin-top: 0.75rem;
+  padding-left: 1.25rem;
+}
+.ppdb-bukti {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+@media print {
+  .no-print { display: none !important; }
 }

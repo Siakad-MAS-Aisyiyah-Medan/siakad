@@ -21,13 +21,13 @@ export const menuByRole = {
     { iconKey: 'Shield', label: 'Audit Log', path: '/admin/audit-logs' },
   ],
   kepsek: [
-    { iconKey: 'LayoutDashboard', label: 'Dashboard', path: '/kepsek/dashboard' },
-    { iconKey: 'Users', label: 'Data Murid & Guru', path: '/kepsek/data' },
-    { iconKey: 'UserCheck', label: 'Data PPDB Baru', path: '/kepsek/ppdb' },
-    { iconKey: 'BarChart3', label: 'Absensi Guru', path: '/kepsek/absensi-guru' },
-    { iconKey: 'ClipboardList', label: 'Laporan Absensi Murid', path: '/kepsek/laporan-absensi' },
-    { iconKey: 'FileText', label: 'Laporan Nilai Murid', path: '/kepsek/laporan-nilai' },
-    { iconKey: 'FileText', label: 'Pusat Laporan', path: '/kepsek/laporan' },
+    { iconKey: 'LayoutDashboard', label: 'Dashboard', path: '/kepala-sekolah/dashboard' },
+    { iconKey: 'Users', label: 'Data Murid & Guru', path: '/kepala-sekolah/data' },
+    { iconKey: 'UserCheck', label: 'Data PPDB Baru', path: '/kepala-sekolah/ppdb' },
+    { iconKey: 'BarChart3', label: 'Absensi Guru', path: '/kepala-sekolah/absensi-guru' },
+    { iconKey: 'ClipboardList', label: 'Laporan Absensi Murid', path: '/kepala-sekolah/laporan-absensi' },
+    { iconKey: 'FileText', label: 'Laporan Nilai Murid', path: '/kepala-sekolah/laporan-nilai' },
+    { iconKey: 'FileText', label: 'Pusat Laporan', path: '/kepala-sekolah/laporan' },
   ],
   guru: [
     { iconKey: 'LayoutDashboard', label: 'Dashboard', path: '/guru/dashboard' },
@@ -38,15 +38,12 @@ export const menuByRole = {
     { iconKey: 'Calendar', label: 'Riwayat Absensiku', path: '/guru/riwayat-absensi' },
   ],
   wali_kelas: [
-    { iconKey: 'LayoutDashboard', label: 'Dashboard', path: '/wali/dashboard' },
-    { iconKey: 'Calendar', label: 'Jadwal Mengajar', path: '/guru/jadwal' },
-    { iconKey: 'Users', label: 'Data Murid', path: '/guru/murid' },
-    { iconKey: 'ClipboardList', label: 'Kelola Absensi', path: '/guru/absensi' },
-    { iconKey: 'FileText', label: 'Kelola Nilai', path: '/guru/nilai' },
-    { iconKey: 'BarChart3', label: 'Rekap Absensi Kelas', path: '/wali/absensi' },
-    { iconKey: 'FileText', label: 'Leger & Validasi Nilai', path: '/wali/nilai' },
-    { iconKey: 'BarChart3', label: 'Laporan Kelas', path: '/wali/laporan' },
-    { iconKey: 'Star', label: 'Kepribadian & Ekskul', path: '/wali/ekskul' },
+    { iconKey: 'LayoutDashboard', label: 'Dashboard', path: '/wali-kelas/dashboard' },
+    { iconKey: 'Users', label: 'Data Murid Kelas', path: '/wali-kelas/murid' },
+    { iconKey: 'BarChart3', label: 'Rekap Absensi Kelas', path: '/wali-kelas/absensi' },
+    { iconKey: 'FileText', label: 'Leger & Validasi Nilai', path: '/wali-kelas/nilai' },
+    { iconKey: 'BarChart3', label: 'Laporan Kelas', path: '/wali-kelas/laporan' },
+    { iconKey: 'Star', label: 'Kepribadian & Ekskul', path: '/wali-kelas/ekskul' },
   ],
   siswa: [
     { iconKey: 'LayoutDashboard', label: 'Dashboard', path: '/siswa/dashboard' },
@@ -55,7 +52,7 @@ export const menuByRole = {
     { iconKey: 'FileText', label: 'Nilai Pribadi', path: '/siswa/nilai' },
   ],
   calon_siswa: [
-    { iconKey: 'LayoutDashboard', label: 'Status Pendaftaran', path: '/calon-siswa/dashboard' },
+    { iconKey: 'LayoutDashboard', label: 'PPDB', path: '/calon-murid/dashboard' },
   ],
 };
 

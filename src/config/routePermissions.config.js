@@ -46,7 +46,26 @@ export const ROUTE_PERMISSIONS = {
   '/siswa/absensi': 'view_absensi_pribadi',
   '/siswa/nilai': 'view_nilai_pribadi',
 
+  '/calon-murid/dashboard': 'manage_pendaftaran_pribadi',
+  '/calon-murid/formulir': 'manage_pendaftaran_pribadi',
+  '/calon-murid/berkas': 'manage_pendaftaran_pribadi',
+  '/calon-murid/status': 'view_status_pendaftaran',
+  '/calon-murid/bukti': 'view_status_pendaftaran',
+  '/ppdb/dashboard': 'manage_pendaftaran_pribadi',
   '/calon-siswa/dashboard': 'manage_pendaftaran_pribadi',
+  '/kepala-sekolah/dashboard': 'view_dashboard_kepsek',
+  '/kepala-sekolah/data': 'view_data_siswa',
+  '/kepala-sekolah/ppdb': 'view_data_siswa',
+  '/kepala-sekolah/laporan': 'view_laporan',
+  '/kepala-sekolah/absensi-guru': 'view_laporan',
+  '/kepala-sekolah/laporan-absensi': 'view_laporan',
+  '/kepala-sekolah/laporan-nilai': 'view_laporan',
+  '/wali-kelas/dashboard': 'view_dashboard_wali',
+  '/wali-kelas/murid': 'view_siswa_kelas',
+  '/wali-kelas/absensi': 'view_absensi_kelas',
+  '/wali-kelas/nilai': 'validate_nilai',
+  '/wali-kelas/laporan': 'view_absensi_kelas',
+  '/wali-kelas/ekskul': 'view_siswa_kelas',
 };
 
 export function getPermissionForPath(path) {

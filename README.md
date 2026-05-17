@@ -6,7 +6,7 @@ Aplikasi web React (Vite) untuk Sistem Informasi Akademik MAS Aisyiyah Medan. Ta
 
 - Node.js 18+ (disarankan LTS)
 - npm
-- Backend API berjalan di `http://localhost:8000` (lihat repo `backend-siakad`)
+- Backend API berjalan di `http://127.0.0.1:8000` (lihat repo `backend-siakad`)
 
 ## Setup cepat (clone baru)
 
@@ -24,7 +24,7 @@ Aplikasi: **http://localhost:1001**
 | Variabel | Contoh (development) |
 |----------|----------------------|
 | `VITE_APP_NAME` | `SIAKAD` |
-| `VITE_API_BASE_URL` | `http://localhost:8000/api` |
+| `VITE_API_BASE_URL` | `http://127.0.0.1:8000/api` |
 
 ## Struktur (`src/`)
 
