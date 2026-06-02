@@ -1,0 +1,62 @@
+# Dependencies
+node_modules/
+vendor/
+backend/composer.phar
+backend/composer-*.phar
+backend/composer2.phar
+composer.phar
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Laravel logs & cache
+storage/logs/*.log
+backend/storage/logs/*.log
+bootstrap/cache/*.php
+backend/bootstrap/cache/*.php
+backend/storage/framework/cache/data/*
+!backend/storage/framework/cache/data/.gitignore
+backend/storage/framework/views/*.php
+!backend/storage/framework/views/.gitignore
+backend/storage/framework/sessions/*
+!backend/storage/framework/sessions/.gitignore
+backend/storage/debugbar/*
+
+# Frontend build & cache
+frontend/dist/
+frontend/dist-ssr/
+frontend/node_modules/.vite/
+frontend/.vite/
+frontend/coverage/
+frontend/.cache/
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Temp & backup
+*.tmp
+*.temp
+*.bak
+*.old
+*.backup
+*.lnk
+
+# Archives & temp exports (jangan commit ZIP hasil export)
+*.zip
+*.tar.gz
+*.rar
+
+# Local Windows helper scripts (gunakan composer/npm global)
+*.bat
+
+# Laravel public storage symlink (dibuat ulang dengan php artisan storage:link)
+backend/public/storage
