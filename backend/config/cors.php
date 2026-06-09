@@ -6,7 +6,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => array_filter(array_map('trim', explode(',', env('CORS_ALLOWED_ORIGINS', env('FRONTEND_URL', 'http://localhost:1001'))))),
+    'allowed_origins' => ['http://localhost:1001', 'http://localhost:1002', 'https://siakad-alpha.vercel.app', env('FRONTEND_URL')],
 
     'allowed_origins_patterns' => [],
 
