@@ -16,6 +16,8 @@ use App\Http\Controllers\Api\LaporanController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Api\Admin\DashboardController::class, 'index']);
+
     Route::middleware('permission:manage_murid')->group(function () {
         Route::get('/murid', [MuridController::class, 'index']);
         Route::put('/murid/{id}', [MuridController::class, 'update']);
@@ -89,6 +91,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::middleware('permission:manage_all')->group(function () {
+        Route::get('/akun', [\App\Http\Controllers\Api\Admin\AkunController::class, 'index']);
+        Route::post('/akun', [\App\Http\Controllers\Api\Admin\AkunController::class, 'store']);
         Route::get('/audit-logs', [AuditLogController::class, 'index']);
         
         Route::get('/profil-sekolah', [ProfilSekolahController::class, 'show']);

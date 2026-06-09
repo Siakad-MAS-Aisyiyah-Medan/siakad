@@ -1,25 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminPageShell from '@app/shared/components/AdminPageShell';
 import { 
     Users, GraduationCap, ClipboardList, BookOpen, 
     Bell, Star, History, AlertCircle 
 } from 'lucide-react';
+import { fetchAdminDashboardStats } from '@app/shared/services/dashboard.service';
 
 export default function AdminDashboard() {
-    // Mock Stats for the Info Boxes
-    const stats = [
-        { label: 'Total Guru', value: '16', icon: <Users />, color: 'blue' },
-        { label: 'Total Murid', value: '122', icon: <GraduationCap />, color: 'green' },
-        { label: 'Mata Pelajaran', value: '18', icon: <ClipboardList />, color: 'purple' },
-        { label: 'Total Kelas', value: '5', icon: <BookOpen />, color: 'orange' },
-    ];
+    const [realStats, setRealStats] = useState({
+        total_guru: 0,
+        total_murid: 0,
+        total_mapel: 0,
+        total_kelas: 0,
+    });
+    const [auditLogs, setAuditLogs] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Mock Audit Log (Recent Activities)
-    const auditLogs = [
-        { id: 1, action: 'Verifikasi Pendaftaran', user: 'Admin', target: 'M. Rizky (Calon Siswa)', time: '10 menit yang lalu' },
-        { id: 2, action: 'Update Profil Sekolah', user: 'Admin', target: 'Banner Hero', time: '1 jam yang lalu' },
-        { id: 3, action: 'Tambah Berita Baru', user: 'Admin', target: 'Juara MTK Nasional', time: '3 jam yang lalu' },
-        { id: 4, action: 'Login Berhasil', user: 'Admin', target: '-', time: '5 jam yang lalu' },
+    useEffect(() => {
+        const loadDashboardData = async () => {
+            try {
+                const data = await fetchAdminDashboardStats();
+                if (data) {
+                    setRealStats(data.stats);
+                    setAuditLogs(data.audit_logs || []);
+                }
+            } catch (error) {
+                console.error('Failed to fetch dashboard stats', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadDashboardData();
+    }, []);
+
+    const stats = [
+        { label: 'Total Guru', value: realStats.total_guru, icon: <Users />, color: 'blue' },
+        { label: 'Total Murid', value: realStats.total_murid, icon: <GraduationCap />, color: 'green' },
+        { label: 'Mata Pelajaran', value: realStats.total_mapel, icon: <ClipboardList />, color: 'purple' },
+        { label: 'Total Kelas', value: realStats.total_kelas, icon: <BookOpen />, color: 'orange' },
     ];
 
     return (
@@ -30,7 +49,13 @@ export default function AdminDashboard() {
                     {stats.map((stat, index) => (
                         <div key={index} className={`stat-box glass border-${stat.color}`}>
                             <div className="stat-content">
-                                <div className="stat-value">{stat.value}</div>
+                                <div className="stat-value">
+                                    {isLoading ? (
+                                        <div style={{ width: '30px', height: '30px', border: '3px solid #e2e8f0', borderTopColor: 'var(--color-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                                    ) : (
+                                        stat.value
+                                    )}
+                                </div>
                                 <div className="stat-label">{stat.label}</div>
                             </div>
                             <div className={`stat-icon bg-${stat.color}`}>
@@ -40,29 +65,7 @@ export default function AdminDashboard() {
                     ))}
                 </div>
 
-                {/* 2. NOTIFIKASI AUDIT LOG BERUPA ALERT */}
-                <div className="audit-log-section glass">
-                    <div className="section-title">
-                        <History size={20} />
-                        <h3>Notifikasi Audit Log (Aktivitas Akun)</h3>
-                    </div>
-                    <div className="logs-list">
-                        {auditLogs.map((log) => (
-                            <div key={log.id} className="log-item glass">
-                                <AlertCircle size={18} className="text-secondary" />
-                                <div className="log-text">
-                                    <strong>{log.user}</strong> melakukan <span>{log.action}</span> pada <em>{log.target}</em>
-                                </div>
-                                <span className="log-time">{log.time}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
 
-                {/* Additional Quick Actions / Layout conforme Picture */}
-                <div className="quick-info-footer glass">
-                    <p>Hanya notifikasi yang termasuk kedalam hak akses role ini yang akan ditampilkan, kecuali Murid/Wali Murid yang tidak memiliki dashboard ini.</p>
-                </div>
             </div>
         </AdminPageShell>
     );
