@@ -21,7 +21,7 @@ export default function HakAksesPage() {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'operator'
+    role: 'admin'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -55,7 +55,7 @@ export default function HakAksesPage() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setFormData({ name: '', username: '', email: '', password: '', confirmPassword: '', role: 'operator' });
+    setFormData({ name: '', username: '', email: '', password: '', confirmPassword: '', role: 'admin' });
     setShowPassword(false);
     setShowConfirmPassword(false);
   };
@@ -194,13 +194,11 @@ export default function HakAksesPage() {
                   <div>
                     <label className="block text-[15px] font-semibold text-slate-700 mb-2">Nama Lengkap</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <User size={18} className="text-slate-400" />
-                      </div>
+                      <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
                       <input 
                         type="text" 
                         required 
-                        className="w-full h-12 pl-12 pr-4 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-700 text-sm placeholder-[#94A3B8]" 
+                        className="relative z-0 w-full h-12 pl-12 pr-4 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-800 text-[15px] placeholder-[#94A3B8]" 
                         value={formData.name} 
                         onChange={(e) => setFormData({...formData, name: e.target.value})} 
                         placeholder="Mis: Budi Santoso" 
@@ -210,13 +208,11 @@ export default function HakAksesPage() {
                   <div>
                     <label className="block text-[15px] font-semibold text-slate-700 mb-2">Username</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <AtSign size={18} className="text-slate-400" />
-                      </div>
+                      <AtSign size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
                       <input 
                         type="text" 
                         required 
-                        className="w-full h-12 pl-12 pr-4 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-700 text-sm placeholder-[#94A3B8]" 
+                        className="relative z-0 w-full h-12 pl-12 pr-4 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-800 text-[15px] placeholder-[#94A3B8]" 
                         value={formData.username} 
                         onChange={(e) => setFormData({...formData, username: e.target.value})} 
                         placeholder="Mis: budi.santoso" 
@@ -230,13 +226,11 @@ export default function HakAksesPage() {
                   <div>
                     <label className="block text-[15px] font-semibold text-slate-700 mb-2">Email Pribadi</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <Mail size={18} className="text-slate-400" />
-                      </div>
+                      <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
                       <input 
                         type="email" 
                         required 
-                        className="w-full h-12 pl-12 pr-4 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-700 text-sm placeholder-[#94A3B8]" 
+                        className="relative z-0 w-full h-12 pl-12 pr-4 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-800 text-[15px] placeholder-[#94A3B8]" 
                         value={formData.email} 
                         onChange={(e) => setFormData({...formData, email: e.target.value})} 
                         placeholder="budi@email.com" 
@@ -246,25 +240,20 @@ export default function HakAksesPage() {
                   <div>
                     <label className="block text-[15px] font-semibold text-slate-700 mb-2">Role Pengguna</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <Shield size={18} className="text-slate-400" />
-                      </div>
+                      <Shield size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
                       <select 
-                        className="w-full h-12 pl-12 pr-10 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all appearance-none text-slate-700 text-sm font-medium" 
+                        className="relative z-0 w-full h-12 pl-12 pr-12 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all appearance-none text-slate-800 text-[15px] font-medium" 
                         value={formData.role} 
                         onChange={(e) => setFormData({...formData, role: e.target.value})}
                       >
                         <option value="admin">Administrator</option>
-                        <option value="operator">Operator</option>
                         <option value="kepsek">Kepala Sekolah</option>
                         <option value="guru">Guru</option>
                         <option value="wali_kelas">Wali Kelas</option>
                         <option value="siswa">Siswa</option>
                         <option value="calon_siswa">Calon Siswa</option>
                       </select>
-                      <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                        <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                      </div>
+                      <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                     </div>
                   </div>
                 </div>
@@ -274,14 +263,12 @@ export default function HakAksesPage() {
                   <div>
                     <label className="block text-[15px] font-semibold text-slate-700 mb-2">Password</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <Lock size={18} className="text-slate-400" />
-                      </div>
+                      <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
                       <input 
                         type={showPassword ? 'text' : 'password'} 
                         required 
                         minLength="6" 
-                        className="w-full h-12 pl-12 pr-12 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-700 text-sm placeholder-[#94A3B8]" 
+                        className="relative z-0 w-full h-12 pl-12 pr-12 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-800 text-[15px] placeholder-[#94A3B8]" 
                         value={formData.password} 
                         onChange={(e) => setFormData({...formData, password: e.target.value})} 
                         placeholder="Minimal 6 karakter" 
@@ -289,7 +276,7 @@ export default function HakAksesPage() {
                       <button 
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 z-10 flex items-center justify-center"
                       >
                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
@@ -306,13 +293,11 @@ export default function HakAksesPage() {
                   <div>
                     <label className="block text-[15px] font-semibold text-slate-700 mb-2">Konfirmasi Password</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <Lock size={18} className="text-slate-400" />
-                      </div>
+                      <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
                       <input 
                         type={showConfirmPassword ? 'text' : 'password'} 
                         required 
-                        className={`w-full h-12 pl-12 pr-12 bg-[#F8FAFC] border ${formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-400 focus:ring-red-500/10 focus:border-red-500' : formData.confirmPassword && formData.password === formData.confirmPassword ? 'border-emerald-400 focus:ring-emerald-500/10 focus:border-emerald-500' : 'border-slate-200 focus:ring-emerald-500/10 focus:border-emerald-500'} rounded-xl focus:bg-white outline-none transition-all text-slate-700 text-sm placeholder-[#94A3B8]`}
+                        className={`relative z-0 w-full h-12 pl-12 pr-12 bg-[#F8FAFC] border ${formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-400 focus:ring-red-500/10 focus:border-red-500' : formData.confirmPassword && formData.password === formData.confirmPassword ? 'border-emerald-400 focus:ring-emerald-500/10 focus:border-emerald-500' : 'border-slate-200 focus:ring-emerald-500/10 focus:border-emerald-500'} rounded-xl focus:bg-white outline-none transition-all text-slate-800 text-[15px] placeholder-[#94A3B8]`}
                         value={formData.confirmPassword} 
                         onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} 
                         placeholder="Ulangi password" 
@@ -320,7 +305,7 @@ export default function HakAksesPage() {
                       <button 
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 z-10 flex items-center justify-center"
                       >
                         {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
