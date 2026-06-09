@@ -19,22 +19,33 @@ return new class extends Migration
             }
         });
 
+        $driver = DB::connection()->getDriverName();
+
         if (Schema::hasColumn('users', 'status_akun')) {
-            DB::statement("
-                ALTER TABLE users
-                MODIFY COLUMN status_akun
-                ENUM('aktif', 'pending', 'nonaktif', 'diblokir')
-                NOT NULL DEFAULT 'aktif'
-            ");
+            if ($driver === 'mysql') {
+                DB::statement("
+                    ALTER TABLE users
+                    MODIFY COLUMN status_akun
+                    ENUM('aktif', 'pending', 'nonaktif', 'diblokir')
+                    NOT NULL DEFAULT 'aktif'
+                ");
+            } else {
+                DB::statement("ALTER TABLE users ALTER COLUMN status_akun TYPE VARCHAR(255)");
+                DB::statement("ALTER TABLE users ALTER COLUMN status_akun SET DEFAULT 'aktif'");
+            }
         }
 
         if (Schema::hasColumn('users', 'role')) {
-            DB::statement("
-                ALTER TABLE users
-                MODIFY COLUMN role
-                ENUM('admin', 'operator', 'kepsek', 'guru', 'wali_kelas', 'siswa', 'calon_siswa')
-                NOT NULL
-            ");
+            if ($driver === 'mysql') {
+                DB::statement("
+                    ALTER TABLE users
+                    MODIFY COLUMN role
+                    ENUM('admin', 'operator', 'kepsek', 'guru', 'wali_kelas', 'siswa', 'calon_siswa')
+                    NOT NULL
+                ");
+            } else {
+                DB::statement("ALTER TABLE users ALTER COLUMN role TYPE VARCHAR(255)");
+            }
         }
 
         // Backfill name dari username jika masih kosong

@@ -16,6 +16,8 @@ return new class extends Migration
             return;
         }
 
+        $driver = DB::connection()->getDriverName();
+
         $nullableStrings = [
             'nama_lengkap', 'tempat_lahir', 'agama', 'kewarganegaraan', 'alamat', 'no_telp',
             'gol_darah', 'sekolah_asal', 'no_sttb', 'nama_ayah', 'nama_ibu',
@@ -30,34 +32,54 @@ return new class extends Migration
             if (!Schema::hasColumn('pendaftaran', $column)) {
                 continue;
             }
-            $type = in_array($column, $textColumns, true) ? 'TEXT' : 'VARCHAR(255)';
-            DB::statement("ALTER TABLE pendaftaran MODIFY `{$column}` {$type} NULL");
+            if ($driver === 'mysql') {
+                $type = in_array($column, $textColumns, true) ? 'TEXT' : 'VARCHAR(255)';
+                DB::statement("ALTER TABLE pendaftaran MODIFY `{$column}` {$type} NULL");
+            } elseif ($driver === 'pgsql') {
+                DB::statement("ALTER TABLE pendaftaran ALTER COLUMN \"{$column}\" DROP NOT NULL");
+            }
         }
 
         if (Schema::hasColumn('pendaftaran', 'tgl_lahir')) {
-            DB::statement('ALTER TABLE pendaftaran MODIFY `tgl_lahir` DATE NULL');
+            if ($driver === 'mysql') {
+                DB::statement('ALTER TABLE pendaftaran MODIFY `tgl_lahir` DATE NULL');
+            } elseif ($driver === 'pgsql') {
+                DB::statement('ALTER TABLE pendaftaran ALTER COLUMN "tgl_lahir" DROP NOT NULL');
+            }
         }
 
         foreach (['anak_ke', 'jml_saudara_kandung', 'jml_saudara_tiri', 'berat_badan', 'tinggi_badan'] as $column) {
             if (Schema::hasColumn('pendaftaran', $column)) {
-                DB::statement("ALTER TABLE pendaftaran MODIFY `{$column}` INT NULL");
+                if ($driver === 'mysql') {
+                    DB::statement("ALTER TABLE pendaftaran MODIFY `{$column}` INT NULL");
+                } elseif ($driver === 'pgsql') {
+                    DB::statement("ALTER TABLE pendaftaran ALTER COLUMN \"{$column}\" DROP NOT NULL");
+                }
             }
         }
 
         if (Schema::hasColumn('pendaftaran', 'status_yatim')) {
-            DB::statement("ALTER TABLE pendaftaran MODIFY `status_yatim` ENUM('Yatim','Piatu','Yatim Piatu','Tidak') NULL");
+            if ($driver === 'mysql') {
+                DB::statement("ALTER TABLE pendaftaran MODIFY `status_yatim` ENUM('Yatim','Piatu','Yatim Piatu','Tidak') NULL");
+            } elseif ($driver === 'pgsql') {
+                DB::statement('ALTER TABLE pendaftaran ALTER COLUMN "status_yatim" DROP NOT NULL');
+            }
         }
 
-        $indexes = collect(DB::select('SHOW INDEX FROM pendaftaran'))
-            ->pluck('Key_name')
-            ->unique();
+        if ($driver === 'mysql') {
+            $indexes = collect(DB::select('SHOW INDEX FROM pendaftaran'))
+                ->pluck('Key_name')
+                ->unique();
 
-        if (!$indexes->contains('pendaftaran_id_user_unique')) {
-            try {
-                DB::statement('ALTER TABLE pendaftaran ADD UNIQUE pendaftaran_id_user_unique (id_user)');
-            } catch (\Throwable) {
-                // Abaikan jika duplikat data atau index sudah ada dengan nama lain.
+            if (!$indexes->contains('pendaftaran_id_user_unique')) {
+                try {
+                    DB::statement('ALTER TABLE pendaftaran ADD UNIQUE pendaftaran_id_user_unique (id_user)');
+                } catch (\Throwable $e) {}
             }
+        } elseif ($driver === 'pgsql') {
+            try {
+                DB::statement('ALTER TABLE pendaftaran ADD CONSTRAINT pendaftaran_id_user_unique UNIQUE (id_user)');
+            } catch (\Throwable $e) {}
         }
     }
 

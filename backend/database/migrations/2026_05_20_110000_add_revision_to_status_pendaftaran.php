@@ -12,12 +12,18 @@ return new class extends Migration
             return;
         }
 
-        DB::statement("
-            ALTER TABLE pendaftaran
-            MODIFY status_pendaftaran ENUM(
-                'draft', 'revision', 'submitted', 'verified', 'accepted', 'rejected'
-            ) NOT NULL DEFAULT 'draft'
-        ");
+        $driver = DB::connection()->getDriverName();
+        if ($driver === 'mysql') {
+            DB::statement("
+                ALTER TABLE pendaftaran
+                MODIFY status_pendaftaran ENUM(
+                    'draft', 'revision', 'submitted', 'verified', 'accepted', 'rejected'
+                ) NOT NULL DEFAULT 'draft'
+            ");
+        } else {
+            DB::statement("ALTER TABLE pendaftaran ALTER COLUMN status_pendaftaran TYPE VARCHAR(255)");
+            DB::statement("ALTER TABLE pendaftaran ALTER COLUMN status_pendaftaran SET DEFAULT 'draft'");
+        }
 
         DB::table('pendaftaran')
             ->where('ppdb_status', 'revisi')
