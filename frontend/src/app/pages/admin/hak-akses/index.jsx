@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Plus, X, UserPlus, User, AtSign, Mail, Shield, Lock, Eye, EyeOff, Info, Check } from 'lucide-react';
 import Swal from 'sweetalert2';
 import AdminPageShell from '@app/shared/components/AdminPageShell';
+import FormInput from '@app/shared/components/FormInput';
 import { useAuditLogs } from '@app/shared/akademik/audit-logs/hooks/useAuditLogs';
 import { fetchAdminAkunList, createAdminAkun } from '@app/shared/services/akun.service';
 
@@ -191,96 +192,65 @@ export default function HakAksesPage() {
               <form id="addAccountForm" onSubmit={handleSubmit} className="space-y-6">
                 {/* Row 1: Nama & Username */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-[15px] font-semibold text-slate-700 mb-2">Nama Lengkap</label>
-                    <div className="relative">
-                      <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
-                      <input 
-                        type="text" 
-                        required 
-                        className="relative z-0 w-full h-12 pl-12 pr-4 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-800 text-[15px] placeholder-[#94A3B8]" 
-                        value={formData.name} 
-                        onChange={(e) => setFormData({...formData, name: e.target.value})} 
-                        placeholder="Mis: Budi Santoso" 
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-[15px] font-semibold text-slate-700 mb-2">Username</label>
-                    <div className="relative">
-                      <AtSign size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
-                      <input 
-                        type="text" 
-                        required 
-                        className="relative z-0 w-full h-12 pl-12 pr-4 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-800 text-[15px] placeholder-[#94A3B8]" 
-                        value={formData.username} 
-                        onChange={(e) => setFormData({...formData, username: e.target.value})} 
-                        placeholder="Mis: budi.santoso" 
-                      />
-                    </div>
-                  </div>
+                  <FormInput 
+                    label="Nama Lengkap"
+                    icon={User}
+                    placeholder="Mis: Budi Santoso"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    required
+                  />
+                  <FormInput 
+                    label="Username"
+                    icon={AtSign}
+                    placeholder="Mis: budi.santoso"
+                    value={formData.username}
+                    onChange={(e) => setFormData({...formData, username: e.target.value})}
+                    required
+                  />
                 </div>
 
                 {/* Row 2: Email & Role */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-[15px] font-semibold text-slate-700 mb-2">Email Pribadi</label>
-                    <div className="relative">
-                      <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
-                      <input 
-                        type="email" 
-                        required 
-                        className="relative z-0 w-full h-12 pl-12 pr-4 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-800 text-[15px] placeholder-[#94A3B8]" 
-                        value={formData.email} 
-                        onChange={(e) => setFormData({...formData, email: e.target.value})} 
-                        placeholder="budi@email.com" 
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-[15px] font-semibold text-slate-700 mb-2">Role Pengguna</label>
-                    <div className="relative">
-                      <Shield size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
-                      <select 
-                        className="relative z-0 w-full h-12 pl-12 pr-12 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all appearance-none text-slate-800 text-[15px] font-medium" 
-                        value={formData.role} 
-                        onChange={(e) => setFormData({...formData, role: e.target.value})}
-                      >
-                        <option value="admin">Administrator</option>
-                        <option value="kepsek">Kepala Sekolah</option>
-                        <option value="guru">Guru</option>
-                        <option value="wali_kelas">Wali Kelas</option>
-                        <option value="siswa">Siswa</option>
-                        <option value="calon_siswa">Calon Siswa</option>
-                      </select>
-                      <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                  </div>
+                  <FormInput 
+                    label="Email Pribadi"
+                    type="email"
+                    icon={Mail}
+                    placeholder="budi@email.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    required
+                  />
+                  <FormInput 
+                    label="Role Pengguna"
+                    type="select"
+                    icon={Shield}
+                    value={formData.role}
+                    onChange={(e) => setFormData({...formData, role: e.target.value})}
+                    options={[
+                      { value: 'admin', label: 'Administrator' },
+                      { value: 'kepsek', label: 'Kepala Sekolah' },
+                      { value: 'guru', label: 'Guru' },
+                      { value: 'wali_kelas', label: 'Wali Kelas' },
+                      { value: 'siswa', label: 'Siswa' },
+                      { value: 'calon_siswa', label: 'Calon Siswa' }
+                    ]}
+                  />
                 </div>
 
                 {/* Row 3: Passwords */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[15px] font-semibold text-slate-700 mb-2">Password</label>
-                    <div className="relative">
-                      <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
-                      <input 
-                        type={showPassword ? 'text' : 'password'} 
-                        required 
-                        minLength="6" 
-                        className="relative z-0 w-full h-12 pl-12 pr-12 bg-[#F8FAFC] border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all text-slate-800 text-[15px] placeholder-[#94A3B8]" 
-                        value={formData.password} 
-                        onChange={(e) => setFormData({...formData, password: e.target.value})} 
-                        placeholder="Minimal 6 karakter" 
-                      />
-                      <button 
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 z-10 flex items-center justify-center"
-                      >
-                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                      </button>
-                    </div>
+                    <FormInput 
+                      label="Password"
+                      type="password"
+                      icon={Lock}
+                      placeholder="Minimal 6 karakter"
+                      value={formData.password}
+                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                      required
+                      minLength="6"
+                    />
                     {/* Password Strength pseudo-indicator */}
                     {formData.password.length > 0 && (
                       <div className="mt-2 flex gap-1 items-center">
@@ -291,25 +261,20 @@ export default function HakAksesPage() {
                     )}
                   </div>
                   <div>
-                    <label className="block text-[15px] font-semibold text-slate-700 mb-2">Konfirmasi Password</label>
-                    <div className="relative">
-                      <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10" />
-                      <input 
-                        type={showConfirmPassword ? 'text' : 'password'} 
-                        required 
-                        className={`relative z-0 w-full h-12 pl-12 pr-12 bg-[#F8FAFC] border ${formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-400 focus:ring-red-500/10 focus:border-red-500' : formData.confirmPassword && formData.password === formData.confirmPassword ? 'border-emerald-400 focus:ring-emerald-500/10 focus:border-emerald-500' : 'border-slate-200 focus:ring-emerald-500/10 focus:border-emerald-500'} rounded-xl focus:bg-white outline-none transition-all text-slate-800 text-[15px] placeholder-[#94A3B8]`}
-                        value={formData.confirmPassword} 
-                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} 
-                        placeholder="Ulangi password" 
-                      />
-                      <button 
-                        type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 z-10 flex items-center justify-center"
-                      >
-                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                      </button>
-                    </div>
+                    <FormInput 
+                      label="Konfirmasi Password"
+                      type="password"
+                      icon={Lock}
+                      placeholder="Ulangi password"
+                      value={formData.confirmPassword}
+                      onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                      required
+                      inputState={
+                        formData.confirmPassword 
+                          ? (formData.password === formData.confirmPassword ? 'success' : 'error') 
+                          : 'default'
+                      }
+                    />
                   </div>
                 </div>
 
