@@ -17,6 +17,7 @@ export default function PengumumanPage() {
     handleChange,
     submitForm,
     removeItem,
+    isFetching,
   } = usePengumuman();
 
   return (
@@ -29,6 +30,7 @@ export default function PengumumanPage() {
           onAdd={openAdd}
           onEdit={openEdit}
           onDelete={removeItem}
+          isFetching={isFetching}
         />
       )}
       {(view === 'add' || view === 'edit') && (

@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Services;
+
+use App\Traits\AuditsAdminActions;
+use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use InvalidArgumentException;
+
+class MuridService
+{
+    use AuditsAdminActions;
+    public function __construct(private EnrollmentService $enrollment)
+    {
+    }
+
+    public function listMurid(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        $query = User::query()
+            ->with(['siswa.kelas', 'pendaftaran'])
+            ->whereIn('role', ['siswa', 'calon_siswa']);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('username', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhereHas('siswa', fn ($s) => $s->where('nama_siswa', 'like', "%{$search}%"))
+                    ->orWhereHas('pendaftaran', fn ($p) => $p->where('nama_lengkap', 'like', "%{$search}%"));
+            });
+        }
+
+        return $query->orderByDesc('id_user')->paginate($perPage);
+    }
+
+    public function updateMurid(int $id, array $data): User
+    {
+        $user = User::findOrFail($id);
+        if (!in_array($user->role, ['siswa', 'calon_siswa'], true)) {
+            throw new InvalidArgumentException('User bukan murid/calon siswa.');
+        }
+
+        if (array_key_exists('role', $data) && $data['role'] !== $user->role) {
+            if ($data['role'] === 'siswa') {
+                throw new InvalidArgumentException(
+                    'Promosi ke siswa hanya melalui aksi Jadikan Siswa (enroll).'
+                );
+            }
+            throw new InvalidArgumentException('Perubahan role tidak diizinkan melalui update.');
+        }
+
+        $user->update([
+            'status_aktif' => $data['status_aktif'] ?? $user->status_aktif,
+        ]);
+
+        $fresh = $user->fresh(['siswa', 'pendaftaran']);
+        $this->auditAdmin('murid.update', $fresh, ['username' => $fresh->username]);
+
+        return $fresh;
+    }
+
+    public function deleteMurid(int $id): void
+    {
+        $user = User::findOrFail($id);
+        if (!in_array($user->role, ['siswa', 'calon_siswa'], true)) {
+            throw new InvalidArgumentException('User bukan murid/calon siswa.');
+        }
+        $this->auditAdmin('murid.delete', $user, ['username' => $user->username]);
+        $user->delete();
+    }
+
+    public function enrollMurid(int $id, ?int $idKelas = null): array
+    {
+        return $this->enrollment->enrollCalonSiswa($id, $idKelas);
+    }
+}

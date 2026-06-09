@@ -18,6 +18,7 @@ export default function MapelPage() {
     handleChange,
     submitForm,
     removeMapel,
+    isFetching,
   } = useMapel();
 
   return (
@@ -30,6 +31,7 @@ export default function MapelPage() {
           onAdd={openAdd}
           onEdit={openEdit}
           onDelete={removeMapel}
+          isFetching={isFetching}
         />
       )}
       {(view === 'add' || view === 'edit') && (

@@ -1,6 +1,6 @@
 import AdminPageShell from '@app/shared/components/AdminPageShell';
-import JadwalTable from '@app/shared/jadwal/admin/components/JadwalTable';
-import JadwalForm from '@app/shared/jadwal/admin/components/JadwalForm';
+import JadwalClassList from '@app/shared/jadwal/admin/components/JadwalClassList';
+import JadwalMatrixUI from '@app/shared/jadwal/admin/components/JadwalMatrixUI';
 import { useJadwal } from '@app/shared/jadwal/admin/hooks/useJadwal';
 
 export default function JadwalPage() {
@@ -8,43 +8,47 @@ export default function JadwalPage() {
     view,
     searchQuery,
     setSearchQuery,
-    filteredData,
-    kelasData,
+    filteredKelas,
     mapelData,
     guruData,
-    formData,
+    waktuData,
+    matrixData,
+    currentKelas,
+    tahunAjaran,
+    semester,
     loading,
-    openAdd,
-    openEdit,
-    cancelForm,
-    handleChange,
-    submitForm,
-    removeJadwal,
+    openMatrix,
+    cancelMatrix,
+    handleMatrixChange,
+    saveMatrix,
+    isFetching,
   } = useJadwal();
 
   return (
     <AdminPageShell>
       {view === 'list' && (
-        <JadwalTable
-          filteredData={filteredData}
+        <JadwalClassList
+          kelasData={filteredKelas}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          onAdd={openAdd}
-          onEdit={openEdit}
-          onDelete={removeJadwal}
+          onSelectKelas={openMatrix}
+          isFetching={isFetching}
         />
       )}
-      {(view === 'add' || view === 'edit') && (
-        <JadwalForm
-          view={view}
-          formData={formData}
-          kelasData={kelasData}
+      
+      {view === 'matrix' && (
+        <JadwalMatrixUI
+          kelas={currentKelas}
+          tahunAjaran={tahunAjaran}
+          semester={semester}
+          waktuData={waktuData}
+          matrixData={matrixData}
           mapelData={mapelData}
           guruData={guruData}
           loading={loading}
-          onChange={handleChange}
-          onSubmit={submitForm}
-          onCancel={cancelForm}
+          onCancel={cancelMatrix}
+          onChangeCell={handleMatrixChange}
+          onSave={saveMatrix}
         />
       )}
     </AdminPageShell>

@@ -7,6 +7,7 @@ export default function MapelTable({
   onAdd,
   onEdit,
   onDelete,
+  isFetching = false,
 }) {
   return (
     <div className="data-panel view-list">
@@ -43,7 +44,21 @@ export default function MapelTable({
             </tr>
           </thead>
           <tbody>
-            {filteredData.length > 0 ? (
+            {isFetching ? (
+              <tr>
+                <td colSpan="4" className="text-center p-6 text-secondary">
+                  <div style={{ display: 'inline-block', width: '2rem', height: '2rem', border: '3px solid #e2e8f0', borderTopColor: 'var(--color-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                  <p className="mt-2">Memuat data mata pelajaran...</p>
+                  <style>
+                    {`
+                      @keyframes spin {
+                        to { transform: rotate(360deg); }
+                      }
+                    `}
+                  </style>
+                </td>
+              </tr>
+            ) : filteredData.length > 0 ? (
               filteredData.map((mapel, index) => (
                 <tr key={mapel.id_mapel}>
                   <td>{index + 1}</td>
@@ -52,7 +67,7 @@ export default function MapelTable({
                   </td>
                   <td>
                     {mapel.guru?.profile?.nama_guru || (
-                      <span className="text-secondary italic">Tidak ditemukan</span>
+                      <span className="text-secondary italic">Tidak diset</span>
                     )}
                   </td>
                   <td className="actions-cell">

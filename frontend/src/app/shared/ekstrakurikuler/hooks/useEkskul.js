@@ -23,10 +23,12 @@ export function useEkskul() {
   const [guruData, setGuruData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [currentId, setCurrentId] = useState(null);
   const [formData, setFormData] = useState(emptyForm);
 
   const loadData = useCallback(async () => {
+    setIsFetching(true);
     try {
       const [ekskul, guru] = await Promise.all([
         fetchEkskulList({ per_page: 100 }),
@@ -36,6 +38,8 @@ export function useEkskul() {
       setGuruData(guru);
     } catch (error) {
       console.error('Error fetching ekskul:', error);
+    } finally {
+      setIsFetching(false);
     }
   }, []);
 
@@ -130,6 +134,7 @@ export function useEkskul() {
     guruData,
     formData,
     loading,
+    isFetching,
     openAdd,
     openEdit,
     cancelForm,

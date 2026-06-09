@@ -14,7 +14,7 @@ export default function AdminDaftarPendaftar() {
         </div>
         <StatsGrid stats={ppdb.stats} />
         <div className="table-container glass mt-6">
-          <PendaftarTable items={ppdb.items} loading={ppdb.loading} />
+          <PendaftarTable items={ppdb.items} loading={ppdb.loading} isFetching={ppdb.isFetching} />
         </div>
       </div>
     </AdminPageShell>

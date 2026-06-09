@@ -26,15 +26,19 @@ export function useGuru() {
   const [guruData, setGuruData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [currentId, setCurrentId] = useState(null);
   const [formData, setFormData] = useState(emptyForm);
 
   const loadGuru = useCallback(async () => {
     try {
+      setIsFetching(true);
       const data = await fetchGuruList();
       setGuruData(data);
     } catch (error) {
       console.error('Error fetching guru:', error);
+    } finally {
+      setIsFetching(false);
     }
   }, []);
 
@@ -135,6 +139,7 @@ export function useGuru() {
     filteredData,
     formData,
     loading,
+    isFetching,
     openAdd,
     openEdit,
     cancelForm,

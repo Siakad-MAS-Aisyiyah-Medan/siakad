@@ -7,6 +7,7 @@ export default function GuruTable({
   onAdd,
   onEdit,
   onDelete,
+  isFetching = false,
 }) {
   return (
     <div className="data-panel view-list">
@@ -44,7 +45,21 @@ export default function GuruTable({
             </tr>
           </thead>
           <tbody>
-            {filteredData.length > 0 ? (
+            {isFetching ? (
+              <tr>
+                <td colSpan="5" className="text-center p-6 text-secondary">
+                  <div style={{ display: 'inline-block', width: '2rem', height: '2rem', border: '3px solid #e2e8f0', borderTopColor: 'var(--color-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                  <p className="mt-2">Memuat data guru & pegawai...</p>
+                  <style>
+                    {`
+                      @keyframes spin {
+                        to { transform: rotate(360deg); }
+                      }
+                    `}
+                  </style>
+                </td>
+              </tr>
+            ) : filteredData.length > 0 ? (
               filteredData.map((guru) => (
                 <tr key={guru.id_user}>
                   <td>

@@ -17,6 +17,7 @@ export default function EkskulPage() {
     handleChange,
     submitForm,
     removeItem,
+    isFetching,
   } = useEkskul();
 
   return (
@@ -29,6 +30,7 @@ export default function EkskulPage() {
           onAdd={openAdd}
           onEdit={openEdit}
           onDelete={removeItem}
+          isFetching={isFetching}
         />
       )}
       {(view === 'add' || view === 'edit') && (

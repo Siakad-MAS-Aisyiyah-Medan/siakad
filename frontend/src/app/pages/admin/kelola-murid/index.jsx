@@ -4,7 +4,7 @@ import MuridTable from '@app/shared/akademik/murid/components/MuridTable';
 import { useMurid } from '@app/shared/akademik/murid/hooks/useMurid';
 
 export default function MuridPage() {
-  const { searchQuery, setSearchQuery, filteredData, promoteMurid, removeMurid } = useMurid();
+  const { searchQuery, setSearchQuery, filteredData, isFetching, promoteMurid, removeMurid } = useMurid();
 
   return (
     <AdminPageShell>
@@ -18,7 +18,7 @@ export default function MuridPage() {
             <MuridFilter searchQuery={searchQuery} onSearchChange={setSearchQuery} />
           </div>
         </div>
-        <MuridTable data={filteredData} onPromote={promoteMurid} onDelete={removeMurid} />
+        <MuridTable data={filteredData} onPromote={promoteMurid} onDelete={removeMurid} isFetching={isFetching} />
       </div>
     </AdminPageShell>
   );

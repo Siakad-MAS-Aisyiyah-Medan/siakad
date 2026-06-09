@@ -21,15 +21,19 @@ export function usePengumuman() {
   const [items, setItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [currentId, setCurrentId] = useState(null);
   const [formData, setFormData] = useState(emptyForm);
 
   const loadData = useCallback(async () => {
+    setIsFetching(true);
     try {
       const data = await fetchPengumumanList({ per_page: 100 });
       setItems(data);
     } catch (error) {
       console.error('Error fetching pengumuman:', error);
+    } finally {
+      setIsFetching(false);
     }
   }, []);
 
@@ -114,6 +118,7 @@ export function usePengumuman() {
     filteredData,
     formData,
     loading,
+    isFetching,
     openAdd,
     openEdit,
     cancelForm,

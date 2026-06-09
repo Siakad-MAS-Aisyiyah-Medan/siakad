@@ -11,10 +11,12 @@ export function useKelas() {
   const [guruData, setGuruData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [currentId, setCurrentId] = useState(null);
   const [formData, setFormData] = useState(emptyForm);
 
   const loadData = useCallback(async () => {
+    setIsFetching(true);
     try {
       const [kelas, guru] = await Promise.all([
         fetchKelasList(),
@@ -24,6 +26,8 @@ export function useKelas() {
       setGuruData(guru);
     } catch (error) {
       console.error('Error fetching kelas:', error);
+    } finally {
+      setIsFetching(false);
     }
   }, []);
 
@@ -108,6 +112,7 @@ export function useKelas() {
     guruData,
     formData,
     loading,
+    isFetching,
     openAdd,
     openEdit,
     cancelForm,

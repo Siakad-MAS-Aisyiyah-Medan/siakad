@@ -16,6 +16,7 @@ export default function PrestasiPage() {
     handleChange,
     submitForm,
     removeItem,
+    isFetching,
   } = usePrestasi();
 
   return (
@@ -28,6 +29,7 @@ export default function PrestasiPage() {
           onAdd={openAdd}
           onEdit={openEdit}
           onDelete={removeItem}
+          isFetching={isFetching}
         />
       )}
       {(view === 'add' || view === 'edit') && (

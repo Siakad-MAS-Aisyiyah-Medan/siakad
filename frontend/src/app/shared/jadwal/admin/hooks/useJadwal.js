@@ -1,139 +1,143 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { fetchJadwalList, createJadwal, updateJadwal, deleteJadwal } from '../services/jadwal.service';
 import { fetchKelasList } from '@app/shared/akademik/kelas/services/kelas.service';
 import { fetchMapelList } from '@app/shared/akademik/mapel/services/mapel.service';
 import { fetchGuruList } from '@app/shared/akademik/guru/services/guru.service';
+import { fetchJadwalMatrix, saveJadwalMatrix } from '../services/jadwal.service';
+import { fetchWaktuPelajaran } from '../services/waktu.service';
 import { confirmAction, toastSuccess, toastError } from '@app/shared/hooks/useConfirm';
 import { resolveJadwalConflictMessage } from '@app/shared/utils/jadwalConflictMessage';
 
-const emptyForm = {
-  id_kelas: '',
-  id_mapel: '',
-  id_guru: '',
-  hari: 'Senin',
-  jam_mulai: '07:00',
-  jam_selesai: '08:30',
-  ruangan: '',
-  tahun_ajaran: '2025/2026',
-  semester: 'Ganjil',
-};
-
 export function useJadwal() {
-  const [view, setView] = useState('list');
-  const [jadwalData, setJadwalData] = useState([]);
+  const [view, setView] = useState('list'); // 'list' | 'matrix'
   const [kelasData, setKelasData] = useState([]);
   const [mapelData, setMapelData] = useState([]);
   const [guruData, setGuruData] = useState([]);
+  const [waktuData, setWaktuData] = useState([]);
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  const [currentId, setCurrentId] = useState(null);
-  const [formData, setFormData] = useState(emptyForm);
+  const [isFetching, setIsFetching] = useState(true);
+  const [currentKelas, setCurrentKelas] = useState(null);
+  const [matrixData, setMatrixData] = useState([]); // format: [{ waktu: {...}, jadwal: { Senin: {...}, Selasa: {...} } }]
+  
+  const [tahunAjaran, setTahunAjaran] = useState('2025/2026');
+  const [semester, setSemester] = useState('Ganjil');
 
-  const loadData = useCallback(async () => {
+  const loadBaseData = useCallback(async () => {
+    setIsFetching(true);
     try {
-      const [jadwal, kelas, mapel, guru] = await Promise.all([
-        fetchJadwalList({ per_page: 100 }),
+      const [kelas, mapel, guru, waktu] = await Promise.all([
         fetchKelasList(),
         fetchMapelList(),
         fetchGuruList({ per_page: 100 }),
+        fetchWaktuPelajaran(),
       ]);
-      setJadwalData(jadwal);
       setKelasData(kelas);
       setMapelData(mapel);
       setGuruData(guru);
+      setWaktuData(waktu.data || waktu); // handle ApiResponse structure
     } catch (error) {
-      console.error('Error fetching jadwal:', error);
+      console.error('Error fetching base data:', error);
+    } finally {
+      setIsFetching(false);
     }
   }, []);
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    loadBaseData();
+  }, [loadBaseData]);
 
-  const filteredData = useMemo(() => {
+  const filteredKelas = useMemo(() => {
     const q = searchQuery.toLowerCase();
-    return jadwalData.filter(
-      (j) =>
-        j.hari?.toLowerCase().includes(q) ||
-        j.kelas?.nama_kelas?.toLowerCase().includes(q) ||
-        j.mapel?.nama_mapel?.toLowerCase().includes(q) ||
-        j.guru?.nama_guru?.toLowerCase().includes(q) ||
-        j.ruangan?.toLowerCase().includes(q)
-    );
-  }, [jadwalData, searchQuery]);
+    return kelasData.filter((k) => k.nama_kelas?.toLowerCase().includes(q));
+  }, [kelasData, searchQuery]);
 
-  const openAdd = () => {
-    setFormData(emptyForm);
-    setView('add');
+  const openMatrix = async (kelas) => {
+    setCurrentKelas(kelas);
+    setView('matrix');
+    await loadMatrixData(kelas.id_kelas);
   };
 
-  const openEdit = (item) => {
-    setCurrentId(item.id_jadwal);
-    setFormData({
-      id_kelas: String(item.id_kelas),
-      id_mapel: String(item.id_mapel),
-      id_guru: String(item.id_guru),
-      hari: item.hari,
-      jam_mulai: (item.jam_mulai || '').slice(0, 5),
-      jam_selesai: (item.jam_selesai || '').slice(0, 5),
-      ruangan: item.ruangan || '',
-      tahun_ajaran: item.tahun_ajaran || '2025/2026',
-      semester: item.semester || 'Ganjil',
-    });
-    setView('edit');
-  };
-
-  const cancelForm = () => {
-    setView('list');
-    setCurrentId(null);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const submitForm = async (e) => {
-    e.preventDefault();
+  const loadMatrixData = async (id_kelas) => {
     setLoading(true);
-    const payload = {
-      ...formData,
-      id_kelas: Number(formData.id_kelas),
-      id_mapel: Number(formData.id_mapel),
-      id_guru: Number(formData.id_guru),
-      ruangan: formData.ruangan || null,
-    };
     try {
-      if (view === 'add') {
-        await createJadwal(payload);
-        toastSuccess('Berhasil', 'Jadwal berhasil ditambahkan');
-      } else {
-        await updateJadwal(currentId, payload);
-        toastSuccess('Berhasil', 'Jadwal berhasil diperbarui');
-      }
-      await loadData();
-      setView('list');
+      const res = await fetchJadwalMatrix(id_kelas, { tahun_ajaran: tahunAjaran, semester });
+      setMatrixData(res.data?.matrix || []);
     } catch (error) {
-      toastError('Gagal', resolveJadwalConflictMessage(error));
+      console.error('Error fetching matrix:', error);
+      toastError('Gagal', 'Tidak dapat memuat jadwal kelas ini.');
     } finally {
       setLoading(false);
     }
   };
 
-  const removeJadwal = async (id) => {
+  const cancelMatrix = () => {
+    setView('list');
+    setCurrentKelas(null);
+    setMatrixData([]);
+  };
+
+  const handleMatrixChange = (id_waktu, hari, field, value) => {
+    setMatrixData((prev) =>
+      prev.map((row) => {
+        if (row.waktu.id_waktu === id_waktu) {
+          const newJadwal = { ...row.jadwal };
+          if (!newJadwal[hari]) newJadwal[hari] = {};
+          newJadwal[hari][field] = value;
+          return { ...row, jadwal: newJadwal };
+        }
+        return row;
+      })
+    );
+  };
+
+  const saveMatrix = async () => {
     const ok = await confirmAction({
-      title: 'Hapus Jadwal?',
-      text: 'Data jadwal yang dihapus tidak dapat dikembalikan.',
-      confirmText: 'Ya, Hapus!',
-      confirmColor: '#ef4444',
+      title: 'Simpan Jadwal?',
+      text: `Jadwal untuk ${currentKelas.nama_kelas} akan disimpan secara permanen.`,
+      confirmText: 'Ya, Simpan',
+      confirmColor: '#10b981',
     });
     if (!ok) return;
+
+    setLoading(true);
     try {
-      await deleteJadwal(id);
-      toastSuccess('Terhapus!', 'Jadwal telah dihapus.');
-      loadData();
-    } catch {
-      toastError('Gagal', 'Gagal menghapus jadwal.');
+      // Flatten matrix into array of jadwal
+      const payloadJadwal = [];
+      const hariList = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      
+      matrixData.forEach((row) => {
+        if (row.waktu.tipe === 'istirahat') return; // Skip istirahat
+        
+        hariList.forEach((hari) => {
+          const cell = row.jadwal[hari];
+          if (cell && cell.id_mapel && cell.id_guru) {
+            payloadJadwal.push({
+              hari,
+              id_waktu: row.waktu.id_waktu,
+              id_mapel: Number(cell.id_mapel),
+              id_guru: Number(cell.id_guru),
+              ruangan: cell.ruangan || null,
+            });
+          }
+        });
+      });
+
+      const payload = {
+        tahun_ajaran: tahunAjaran,
+        semester,
+        jadwal: payloadJadwal,
+      };
+
+      await saveJadwalMatrix(currentKelas.id_kelas, payload);
+      toastSuccess('Berhasil', 'Jadwal berhasil disimpan.');
+      
+      // Reload class list to update jadwal_count badge
+      loadBaseData();
+    } catch (error) {
+      toastError('Gagal Menyimpan', resolveJadwalConflictMessage(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -141,17 +145,21 @@ export function useJadwal() {
     view,
     searchQuery,
     setSearchQuery,
-    filteredData,
-    kelasData,
+    filteredKelas,
     mapelData,
     guruData,
-    formData,
+    waktuData,
+    matrixData,
+    currentKelas,
+    tahunAjaran,
+    setTahunAjaran,
+    semester,
+    setSemester,
     loading,
-    openAdd,
-    openEdit,
-    cancelForm,
-    handleChange,
-    submitForm,
-    removeJadwal,
+    isFetching,
+    openMatrix,
+    cancelMatrix,
+    handleMatrixChange,
+    saveMatrix,
   };
 }

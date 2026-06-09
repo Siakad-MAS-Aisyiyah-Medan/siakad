@@ -18,6 +18,7 @@ export default function KelasPage() {
     handleChange,
     submitForm,
     removeKelas,
+    isFetching,
   } = useKelas();
 
   return (
@@ -30,6 +31,7 @@ export default function KelasPage() {
           onAdd={openAdd}
           onEdit={openEdit}
           onDelete={removeKelas}
+          isFetching={isFetching}
         />
       )}
       {(view === 'add' || view === 'edit') && (

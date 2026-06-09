@@ -15,13 +15,11 @@ export const menuByRole = {
     { iconKey: 'UserCheck', label: 'Verifikasi PPDB', path: '/admin/ppdb' },
     { iconKey: 'Settings', label: 'Akun & Hak Akses', path: '/admin/hak-akses' },
     { iconKey: 'FileText', label: 'Laporan', path: '/admin/laporan' },
-    { iconKey: 'BarChart3', label: 'Absensi Guru', path: '/admin/absensi-guru' },
   ],
   kepsek: [
     { iconKey: 'LayoutDashboard', label: 'Dashboard', path: '/kepala-sekolah/dashboard' },
     { iconKey: 'Users', label: 'Data Murid & Guru', path: '/kepala-sekolah/data' },
     { iconKey: 'UserCheck', label: 'Data PPDB Baru', path: '/kepala-sekolah/ppdb' },
-    { iconKey: 'BarChart3', label: 'Absensi Guru', path: '/kepala-sekolah/absensi-guru' },
     { iconKey: 'ClipboardList', label: 'Laporan Absensi Murid', path: '/kepala-sekolah/laporan-absensi' },
     { iconKey: 'FileText', label: 'Laporan Nilai Murid', path: '/kepala-sekolah/laporan-nilai' },
     { iconKey: 'FileText', label: 'Pusat Laporan', path: '/kepala-sekolah/laporan' },

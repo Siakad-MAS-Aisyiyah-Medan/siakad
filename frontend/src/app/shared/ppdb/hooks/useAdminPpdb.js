@@ -14,11 +14,12 @@ import { toastError, toastSuccess } from '@app/shared/hooks/useConfirm';
 export function useAdminPpdb() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
   const load = useCallback(async () => {
-    setLoading(true);
+    setIsFetching(true);
     try {
       const data = await fetchAdminPendaftar({
         status: statusFilter || undefined,
@@ -28,7 +29,7 @@ export function useAdminPpdb() {
     } catch (e) {
       console.error(e);
     } finally {
-      setLoading(false);
+      setIsFetching(false);
     }
   }, [statusFilter, searchQuery]);
 
@@ -72,6 +73,7 @@ export function useAdminPpdb() {
   return {
     items,
     loading,
+    isFetching,
     stats,
     statusFilter,
     setStatusFilter,

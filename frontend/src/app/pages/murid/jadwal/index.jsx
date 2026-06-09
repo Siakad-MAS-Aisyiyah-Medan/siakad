@@ -8,25 +8,23 @@ export default function SiswaJadwalPage() {
   const user = getStoredUser();
   const profile = getStoredProfile();
   const name = getDisplayName(profile, user?.role, user?.username);
-  const { items, loading, error } = useJadwalSiswa();
+  const { items, loading, isFetching, error } = useJadwalSiswa();
 
   return (
     <MainLayout role="siswa" name={name}>
-      {loading && (
-        <div className="glass p-6 text-secondary">Memuat jadwal pelajaran...</div>
-      )}
-      {error && !loading && (
+      {error && (
         <div className="glass p-6 text-red-500" style={{ borderRadius: '12px' }}>
           {error}
         </div>
       )}
-      {!loading && !error && (
+      {!error && (
         <JadwalScheduleView
           title="Jadwal Pelajaran"
           subtitle="Jadwal pelajaran kelas Anda."
           items={items}
           showGuru
           emptyMessage="Belum ada jadwal untuk kelas Anda."
+          isFetching={isFetching}
         />
       )}
     </MainLayout>

@@ -30,6 +30,7 @@ export default function JadwalScheduleView({
   showKelas = false,
   showGuru = false,
   emptyMessage = 'Belum ada jadwal untuk ditampilkan.',
+  isFetching = false,
 }) {
   const grouped = groupByHari(items);
   const hasAny = items.length > 0;
@@ -43,7 +44,19 @@ export default function JadwalScheduleView({
         </div>
       </div>
 
-      {!hasAny ? (
+      {isFetching ? (
+        <div className="glass mt-6 p-8 text-center text-secondary">
+          <div style={{ display: 'inline-block', width: '2.5rem', height: '2.5rem', border: '4px solid #e2e8f0', borderTopColor: 'var(--color-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+          <p className="mt-4">Memuat jadwal pelajaran...</p>
+          <style>
+            {`
+              @keyframes spin {
+                to { transform: rotate(360deg); }
+              }
+            `}
+          </style>
+        </div>
+      ) : !hasAny ? (
         <div className="glass mt-6 p-8 text-center text-secondary">
           <Calendar size={40} className="mx-auto mb-3 opacity-50" />
           <p>{emptyMessage}</p>

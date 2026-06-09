@@ -21,3 +21,13 @@ export async function deleteJadwal(id) {
   const response = await apiClient.delete(`/jadwal/${id}`);
   return response.data;
 }
+
+export async function fetchJadwalMatrix(id_kelas, params = {}) {
+  const response = await apiClient.get(`/jadwal/matrix/${id_kelas}`, { params });
+  return response.data;
+}
+
+export async function saveJadwalMatrix(id_kelas, payload) {
+  const response = await apiClient.post(`/jadwal/matrix/${id_kelas}`, payload);
+  return response.data;
+}

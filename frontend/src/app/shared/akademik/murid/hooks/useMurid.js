@@ -8,16 +8,17 @@ export function useMurid() {
   const [muridData, setMuridData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
 
   const loadMurid = useCallback(async () => {
-    setLoading(true);
+    setIsFetching(true);
     try {
       const data = await fetchMuridList({ search: searchQuery || undefined });
       setMuridData(data);
     } catch (error) {
       console.error('Error fetching murid:', error);
     } finally {
-      setLoading(false);
+      setIsFetching(false);
     }
   }, [searchQuery]);
 
@@ -122,6 +123,7 @@ export function useMurid() {
     setSearchQuery,
     filteredData,
     loading,
+    isFetching,
     promoteMurid,
     removeMurid,
   };

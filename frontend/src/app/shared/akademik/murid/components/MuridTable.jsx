@@ -11,7 +11,7 @@ const PPDB_LABELS = {
   menjadi_murid: 'Menjadi Murid',
 };
 
-export default function MuridTable({ data, onPromote, onDelete }) {
+export default function MuridTable({ data, onPromote, onDelete, isFetching = false }) {
   return (
     <div className="table-container glass mt-6">
       <table className="data-table">
@@ -26,7 +26,21 @@ export default function MuridTable({ data, onPromote, onDelete }) {
           </tr>
         </thead>
         <tbody>
-          {data.length > 0 ? (
+          {isFetching ? (
+            <tr>
+              <td colSpan="6" className="text-center p-6 text-secondary">
+                <div style={{ display: 'inline-block', width: '2rem', height: '2rem', border: '3px solid #e2e8f0', borderTopColor: 'var(--color-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                <p className="mt-2">Memuat data murid...</p>
+                <style>
+                  {`
+                    @keyframes spin {
+                      to { transform: rotate(360deg); }
+                    }
+                  `}
+                </style>
+              </td>
+            </tr>
+          ) : data.length > 0 ? (
             data.map((murid, index) => {
               const nama =
                 murid.siswa?.nama_siswa || murid.pendaftaran?.nama_lengkap || '-';

@@ -16,16 +16,20 @@ export function useMapel() {
   const [guruData, setGuruData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [currentId, setCurrentId] = useState(null);
   const [formData, setFormData] = useState(emptyForm);
 
   const loadData = useCallback(async () => {
+    setIsFetching(true);
     try {
       const [mapel, guru] = await Promise.all([fetchMapelList(), fetchGuruList()]);
       setMapelData(mapel);
       setGuruData(guru);
     } catch (error) {
       console.error('Error fetching mapel:', error);
+    } finally {
+      setIsFetching(false);
     }
   }, []);
 
@@ -111,6 +115,7 @@ export function useMapel() {
     guruData,
     formData,
     loading,
+    isFetching,
     openAdd,
     openEdit,
     cancelForm,

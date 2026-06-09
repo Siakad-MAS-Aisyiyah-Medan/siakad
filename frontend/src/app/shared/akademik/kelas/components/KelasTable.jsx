@@ -7,6 +7,7 @@ export default function KelasTable({
   onAdd,
   onEdit,
   onDelete,
+  isFetching = false,
 }) {
   return (
     <div className="data-panel view-list">
@@ -38,27 +39,39 @@ export default function KelasTable({
               <th>No</th>
               <th>Nama Kelas</th>
               <th>Wali Kelas</th>
+              <th>Jumlah Siswa</th>
               <th className="text-right">Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {filteredData.length > 0 ? (
+            {isFetching ? (
+              <tr>
+                <td colSpan="5" className="text-center p-6 text-secondary">
+                  <div style={{ display: 'inline-block', width: '2rem', height: '2rem', border: '3px solid #e2e8f0', borderTopColor: 'var(--color-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                  <p className="mt-2">Memuat data kelas...</p>
+                  <style>
+                    {`
+                      @keyframes spin {
+                        to { transform: rotate(360deg); }
+                      }
+                    `}
+                  </style>
+                </td>
+              </tr>
+            ) : filteredData.length > 0 ? (
               filteredData.map((kelas, index) => (
                 <tr key={kelas.id_kelas}>
                   <td>{index + 1}</td>
                   <td>
                     <strong>{kelas.nama_kelas}</strong>
                   </td>
-                  <td>
-                    {kelas.wali_kelas?.nama_guru || kelas.wali_kelas?.profile?.nama_guru || (
-                      <span className="text-secondary italic">Belum diset</span>
-                    )}
-                  </td>
+                  <td>{kelas.wali_kelas?.guru?.nama_guru || '-'}</td>
+                  <td>{kelas.jumlah_siswa} Siswa</td>
                   <td className="actions-cell">
-                    <button type="button" onClick={() => onEdit(kelas)} className="btn-icon edit" title="Edit">
+                    <button type="button" onClick={() => onEdit(kelas)} className="btn-icon edit" title="Edit Data">
                       <Edit2 size={16} />
                     </button>
-                    <button type="button" onClick={() => onDelete(kelas.id_kelas)} className="btn-icon delete" title="Hapus">
+                    <button type="button" onClick={() => onDelete(kelas.id_kelas)} className="btn-icon delete" title="Hapus Data">
                       <Trash2 size={16} />
                     </button>
                   </td>
@@ -66,7 +79,8 @@ export default function KelasTable({
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="text-center p-4 text-secondary">
+                <td colSpan="5" className="text-center p-6 text-secondary">
+                  <FolderSearch size={48} className="mx-auto mb-2 opacity-50" />
                   Data kelas tidak ditemukan.
                 </td>
               </tr>
